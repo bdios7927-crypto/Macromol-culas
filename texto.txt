@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macromoléculas - Presentación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #050508;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+        }
+        .title-font { font-family: 'Orbitron', sans-serif; }
+        .typewriter-font { font-family: 'Courier Prime', monospace; }
+        
+        .bg-animated {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,107,53,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,212,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(184,41,221,0.15) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        #startScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050508;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        #startScreen.hidden {
+            display: none;
+        }
+        
+        .start-btn {
+            padding: 20px 50px;
+            background: linear-gradient(135deg, #00d4ff, #b829dd);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            animation: pulse-btn 2s infinite;
+            box-shadow: 0 0 30px rgba(0,212,255,0.5);
+        }
+        
+        @keyframes pulse-btn {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(0,212,255,0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(0,212,255,0.8); }
+        }
+        
+        .start-text {
+            margin-top: 20px;
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+        
+        #introScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050508;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out, visibility 1s;
+        }
+        
+        #introScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .intro-title {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: #00d4ff;
+            text-shadow: 0 0 30px #00d4ff;
+            margin-bottom: 60px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInDown 1s forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .names-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            min-height: 400px;
+        }
+        
+        .name-item {
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            color: #fff;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.5s ease;
+            text-align: center;
+            padding: 10px 30px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .name-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .name-item.typing::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: #00d4ff;
+            margin-left: 5px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .skip-btn {
+            position: absolute;
+            bottom: 40px;
+            padding: 12px 30px;
+            background: rgba(0,212,255,0.2);
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+        
+        .skip-btn:hover {
+            background: rgba(0,212,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: #00d4ff;
+            text-shadow: 0 0 30px #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .molecule-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        canvas {
+            max-width: 100%;
+            max-height: 50vh;
+        }
+        
+        .info-panel {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        
+        .molecule-name {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b35, #b829dd, #00d4ff);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        @media (max-width: 768px) {
+            .info-panel { padding: 20px; }
+            .btn { width: 50px; height: 50px; font-size: 1.2rem; }
+            .name-item { padding: 8px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA DE INICIO -->
+    <div id="startScreen">
+        <button class="start-btn" onclick="startPresentation()">▶ INICIAR PRESENTACIÓN</button>
+        <p class="start-text">Haz click para activar audio</p>
+    </div>
+
+    <div id="introScreen" class="hidden">
+        <h1 class="intro-title title-font">INTEGRANTES DEL GRUPO</h1>
+        <div class="names-container" id="namesContainer"></div>
+        <button class="skip-btn" onclick="skipIntro()">Saltar Intro ▶</button>
+    </div>
+
+    <div class="bg-animated"></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+    
+    <div class="container" style="opacity: 0; pointer-events: none;" id="mainContainer">
+        <div class="header">
+            <h1 class="title-font">MACROMOLÉCULAS BIOLÓGICAS</h1>
+            <p style="opacity: 0.8; font-size: 1.1rem;">Lípidos • Proteínas • Ácidos Nucleicos</p>
+        </div>
+        
+        <div class="molecule-container">
+            <canvas id="moleculeCanvas" width="600" height="500"></canvas>
+        </div>
+        
+        <div class="info-panel" id="infoPanel">
+            <div class="badge" id="typeBadge">Lípido</div>
+            <h2 class="molecule-name title-font" id="molName" style="color: #ff6b35;">Triglicérido</h2>
+            <div class="formula" id="molFormula" style="color: #ff8c5a; border-left: 4px solid #ff6b35;">Glicerol + 3 Ácidos grasos</div>
+            <p class="description" id="molDesc">Principal forma de almacenamiento de energía en animales. Hidrofóbico y energía-denso (9 kcal/g).</p>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="prevMol()">◀</button>
+            <button class="btn" onclick="togglePlay()" id="playBtn">⏸</button>
+            <button class="btn" onclick="nextMol()">▶</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== SISTEMA DE AUDIO ==========
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let ambientOscillator = null;
+        let ambientGain = null;
+        let speechSynth = null;
+        let spanishVoice = null;
+
+        // Cargar voces
+        function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
+            
+            speechSynth = window.speechSynthesis;
+            const voices = speechSynth.getVoices();
+            
+            // Buscar voz femenina española bonita
+            spanishVoice = voices.find(voice => 
+                (voice.lang.includes('es') || voice.lang.includes('ES')) &&
+                (voice.name.includes('Female') || voice.name.includes('Mujer') || 
+                 voice.name.includes('Monica') || voice.name.includes('Helena') ||
+                 voice.name.includes('Laura') || voice.name.includes('Sofia'))
+            );
+            
+            // Si no hay específica, usar cualquier español
+            if (!spanishVoice) {
+                spanishVoice = voices.find(voice => 
+                    voice.lang.includes('es') || voice.lang.includes('ES')
+                );
+            }
+            
+            console.log('Voz seleccionada:', spanishVoice ? spanishVoice.name : 'Ninguna');
+        }
+
+        if ('speechSynthesis' in window) {
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+            loadVoices();
+        }
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (!speechSynth) {
+                speechSynth = window.speechSynthesis;
+                loadVoices();
+            }
+        }
+
+        // VOZ BONITA - Solo para "Presentación iniciada"
+        function speakWelcome() {
+            if (!speechSynth) return;
+            
+            speechSynth.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance("Presentación iniciada");
+            
+            // Configuración voz bonita
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.85; // Más lenta, elegante
+            utterance.pitch = 1.1; // Un poco más aguda, femenina
+            utterance.volume = 0.9;
+            
+            if (spanishVoice) {
+                utterance.voice = spanishVoice;
+            }
+            
+            speechSynth.speak(utterance);
+        }
+
+        // BUBBLE POP 🫧
+        function playBubblePopSound() {
+            if (!audioCtx) return;
+            
+            const now = audioCtx.currentTime;
+            
+            // POP
+            const pop = audioCtx.createOscillator();
+            const popGain = audioCtx.createGain();
+            const popFilter = audioCtx.createBiquadFilter();
+            
+            pop.type = 'sine';
+            const baseFreq = 650 + Math.random() * 100;
+            pop.frequency.setValueAtTime(baseFreq, now);
+            pop.frequency.exponentialRampToValueAtTime(200, now + 0.12);
+            
+            popFilter.type = 'lowpass';
+            popFilter.frequency.value = 900;
+            popFilter.Q.value = 0.6;
+            
+            popGain.gain.setValueAtTime(0, now);
+            popGain.gain.linearRampToValueAtTime(0.2, now + 0.008);
+            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            
+            pop.connect(popFilter);
+            popFilter.connect(popGain);
+            popGain.connect(audioCtx.destination);
+            
+            pop.start(now);
+            pop.stop(now + 0.15);
+            
+            // BLOOP
+            const bloop = audioCtx.createOscillator();
+            const bloopGain = audioCtx.createGain();
+            const bloopFilter = audioCtx.createBiquadFilter();
+            
+            bloop.type = 'sine';
+            bloop.frequency.setValueAtTime(350, now + 0.02);
+            bloop.frequency.exponentialRampToValueAtTime(150, now + 0.18);
+            
+            bloopFilter.type = 'lowpass';
+            bloopFilter.frequency.value = 500;
+            
+            bloopGain.gain.setValueAtTime(0, now + 0.02);
+            bloopGain.gain.linearRampToValueAtTime(0.1, now + 0.03);
+            bloopGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+            
+            bloop.connect(bloopFilter);
+            bloopFilter.connect(bloopGain);
+            bloopGain.connect(audioCtx.destination);
+            
+            bloop.start(now + 0.02);
+            bloop.stop(now + 0.18);
+            
+            // SHIMMER
+            const shimmer = audioCtx.createOscillator();
+            const shimmerGain = audioCtx.createGain();
+            const shimmerFilter = audioCtx.createBiquadFilter();
+            
+            shimmer.type = 'triangle';
+            shimmer.frequency.setValueAtTime(baseFreq * 1.8, now);
+            
+            shimmerFilter.type = 'highpass';
+            shimmerFilter.frequency.value = 800;
+            
+            shimmerGain.gain.setValueAtTime(0, now);
+            shimmerGain.gain.linearRampToValueAtTime(0.06, now + 0.005);
+            shimmerGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            
+            shimmer.connect(shimmerFilter);
+            shimmerFilter.connect(shimmerGain);
+            shimmerGain.connect(audioCtx.destination);
+            
+            shimmer.start(now);
+            shimmer.stop(now + 0.08);
+        }
+
+        // SONIDO AL CAMBIAR MOLÉCULA - Chime suave
+        function playChangeSound() {
+            if (!audioCtx) return;
+            
+            const now = audioCtx.currentTime;
+            
+            // Chime cristalino
+            const chime = audioCtx.createOscillator();
+            const chimeGain = audioCtx.createGain();
+            const chimeFilter = audioCtx.createBiquadFilter();
+            
+            chime.type = 'sine';
+            chime.frequency.setValueAtTime(880, now); // A5
+            chime.frequency.exponentialRampToValueAtTime(440, now + 0.2);
+            
+            chimeFilter.type = 'bandpass';
+            chimeFilter.frequency.value = 1000;
+            chimeFilter.Q.value = 2;
+            
+            chimeGain.gain.setValueAtTime(0, now);
+            chimeGain.gain.linearRampToValueAtTime(0.15, now + 0.02);
+            chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+            
+            chime.connect(chimeFilter);
+            chimeFilter.connect(chimeGain);
+            chimeGain.connect(audioCtx.destination);
+            
+            chime.start(now);
+            chime.stop(now + 0.4);
+            
+            // Armonía suave
+            const harmony = audioCtx.createOscillator();
+            const harmonyGain = audioCtx.createGain();
+            
+            harmony.type = 'sine';
+            harmony.frequency.setValueAtTime(1100, now + 0.05);
+            harmony.frequency.exponentialRampToValueAtTime(550, now + 0.3);
+            
+            harmonyGain.gain.setValueAtTime(0, now + 0.05);
+            harmonyGain.gain.linearRampToValueAtTime(0.08, now + 0.08);
+            harmonyGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            
+            harmony.connect(harmonyGain);
+            harmonyGain.connect(audioCtx.destination);
+            
+            harmony.start(now + 0.05);
+            harmony.stop(now + 0.35);
+        }
+
+        // SONIDO DE FONDO - Ambiente suave
+        function startAmbientSound() {
+            if (!audioCtx || ambientOscillator) return;
+            
+            // Oscilador 1 - Base
+            ambientOscillator = audioCtx.createOscillator();
+            ambientGain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            
+            ambientOscillator.type = 'sine';
+            ambientOscillator.frequency.setValueAtTime(80, audioCtx.currentTime);
+            
+            // Oscilador 2 - Detune
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(82, audioCtx.currentTime);
+            
+            // Filtro
+            filter.type = 'lowpass';
+            filter.frequency.value = 300;
+            filter.Q.value = 0.5;
+            
+            // LFO para movimiento suave
+            const lfo = audioCtx.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = 0.08;
+            const lfoGain = audioCtx.createGain();
+            lfoGain.gain.value = 30;
+            lfo.connect(lfoGain);
+            lfoGain.connect(filter.frequency);
+            lfo.start();
+            
+            // Ganancias (muy bajas para fondo)
+            ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            ambientGain.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 2);
+            
+            gain2.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain2.gain.linearRampToValueAtTime(0.015, audioCtx.currentTime + 2);
+            
+            // Conexiones
+            ambientOscillator.connect(filter);
+            filter.connect(ambientGain);
+            ambientGain.connect(audioCtx.destination);
+            
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            
+            ambientOscillator.start();
+            osc2.start();
+            
+            // Guardar referencias
+            ambientOscillator.osc2 = osc2;
+            ambientOscillator.gain2 = gain2;
+        }
+
+        // INICIAR PRESENTACIÓN
+        function startPresentation() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('introScreen').classList.remove('hidden');
+            
+            initAudio();
+            
+            // Cargar voces y hablar
+            setTimeout(() => {
+                if (!spanishVoice) loadVoices();
+                speakWelcome(); // "Presentación iniciada"
+            }, 100);
+            
+            // Iniciar intro
+            initIntro();
+        }
+
+        // ========== DATOS ==========
+        const integrantes = [
+            "Karina Guadalupe Sánchez Pastrana",
+            "Haryanis Celeste González Vargas",
+            "Whiteney Edith Ubeda López",
+            "Yerling Magdalena López Figueroa",
+            "Endell Getzahel Castellano Ayestas",
+            "Karina Massiel Zelaya Amaya"
+        ];
+
+        let currentNameIndex = 0;
+        let introFinished = false;
+
+        function initIntro() {
+            const container = document.getElementById('namesContainer');
+            integrantes.forEach((nombre, index) => {
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'name-item typewriter-font';
+                nameDiv.id = `name-${index}`;
+                nameDiv.textContent = '';
+                container.appendChild(nameDiv);
+            });
+            setTimeout(() => typeNextName(), 600);
+        }
+
+        function typeNextName() {
+            if (currentNameIndex >= integrantes.length) {
+                setTimeout(() => {
+                    if (!introFinished) skipIntro();
+                }, 2000);
+                return;
+            }
+            
+            const nameElement = document.getElementById(`name-${currentNameIndex}`);
+            const fullName = integrantes[currentNameIndex];
+            let charIndex = 0;
+            
+            nameElement.classList.add('visible', 'typing');
+            
+            function typeChar() {
+                if (charIndex < fullName.length) {
+                    nameElement.textContent += fullName.charAt(charIndex);
+                    charIndex++;
+                    playBubblePopSound(); // 🫧 Bubble pop
+                    setTimeout(typeChar, 50);
+                } else {
+                    nameElement.classList.remove('typing');
+                    currentNameIndex++;
+                    setTimeout(() => typeNextName(), 800);
+                }
+            }
+            
+            typeChar();
+        }
+
+        function skipIntro() {
+            if (introFinished) return;
+            introFinished = true;
+            
+            // Iniciar ambiente
+            startAmbientSound();
+            
+            document.getElementById('introScreen').classList.add('hidden');
+            document.getElementById('mainContainer').style.opacity = '1';
+            document.getElementById('mainContainer').style.pointerEvents = 'auto';
+            
+            updateDisplay();
+            animate(0);
+        }
+
+        const molecules = [
+            {
+                type: "Lípido", color: "#ff6b35", bg: "rgba(255,107,53,0.3)",
+                name: "Triglicérido", formula: "Glicerol + 3 Ácidos grasos",
+                desc: "Principal forma de almacenamiento de energía. Hidrofóbico y energía-denso (9 kcal/g).",
+                draw: (ctx, time) => drawTriglyceride(ctx, time)
+            },
+            {
+                type: "Lípido", color: "#ff6b35", bg: "rgba(255,107,53,0.3)",
+                name: "Fosfolípido", formula: "Cabeza polar + 2 Colas",
+                desc: "Componente de membranas. Estructura anfipática con bicapa lipídica.",
+                draw: (ctx, time) => drawPhospholipid(ctx, time)
+            },
+            {
+                type: "Proteína", color: "#b829dd", bg: "rgba(184,41,221,0.3)",
+                name: "Hélice Alfa", formula: "Estructura secundaria α",
+                desc: "Espiral estabilizada por puentes de hidrógeno. 3.6 aminoácidos por vuelta.",
+                draw: (ctx, time) => drawHelix(ctx, time)
+            },
+            {
+                type: "Proteína", color: "#b829dd", bg: "rgba(184,41,221,0.3)",
+                name: "Proteína 3D", formula: "Plegamiento funcional",
+                desc: "Estructura terciaria con puentes disulfuro e interacciones hidrofóbicas.",
+                draw: (ctx, time) => drawProtein3D(ctx, time)
+            },
+            {
+                type: "Ácido Nucleico", color: "#00d4ff", bg: "rgba(0,212,255,0.3)",
+                name: "ADN", formula: "Doble hélice",
+                desc: "Portador de información genética. Cadenas antiparalelas con bases A-T, G-C.",
+                draw: (ctx, time) => drawDNA(ctx, time)
+            },
+            {
+                type: "Ácido Nucleico", color: "#00d4ff", bg: "rgba(0,212,255,0.3)",
+                name: "ARN", formula: "Cadena simple",
+                desc: "Transporta información del ADN a ribosomas. Contiene uracilo y ribosa.",
+                draw: (ctx, time) => drawRNA(ctx, time)
+            }
+        ];
+
+        let current = 0;
+        let isPlaying = true;
+        let lastTime = 0;
+        let autoPlayTimer = 0;
+        const SLIDE_DURATION = 10000;
+
+        const canvas = document.getElementById('moleculeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawAtom(ctx, x, y, z, color, size, label) {
+            const scale = 300 / (300 + z);
+            const x2d = x * scale + canvas.width/2;
+            const y2d = y * scale + canvas.height/2;
+            const size2d = size * scale;
+            
+            ctx.beginPath();
+            ctx.arc(x2d + 3, y2d + 3, size2d, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.fill();
+            
+            const gradient = ctx.createRadialGradient(x2d - size2d/3, y2d - size2d/3, 0, x2d, y2d, size2d);
+            gradient.addColorStop(0, '#fff');
+            gradient.addColorStop(0.3, color);
+            gradient.addColorStop(1, color);
+            
+            ctx.beginPath();
+            ctx.arc(x2d, y2d, size2d, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(x2d - size2d/3, y2d - size2d/3, size2d/4, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,0.6)';
+            ctx.fill();
+        }
+
+        function drawBond(ctx, x1, y1, z1, x2, y2, z2, color) {
+            const scale1 = 300 / (300 + z1);
+            const scale2 = 300 / (300 + z2);
+            const x1_2d = x1 * scale1 + canvas.width/2;
+            const y1_2d = y1 * scale1 + canvas.height/2;
+            const x2_2d = x2 * scale2 + canvas.width/2;
+            const y2_2d = y2 * scale2 + canvas.height/2;
+            
+            ctx.beginPath();
+            ctx.moveTo(x1_2d, y1_2d);
+            ctx.lineTo(x2_2d, y2_2d);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        function drawTriglyceride(ctx, time) {
+            const rot = time * 0.001;
+            for (let i = 0; i < 3; i++) {
+                const x = (i - 1) * 60;
+                const y = Math.sin(rot + i) * 20;
+                const z = Math.cos(rot + i) * 20;
+                drawAtom(ctx, x, y, z, '#00d4ff', 15, 'C');
+                if (i > 0) {
+                    const prevX = ((i-1) - 1) * 60;
+                    const prevY = Math.sin(rot + (i-1)) * 20;
+                    const prevZ = Math.cos(rot + (i-1)) * 20;
+                    drawBond(ctx, prevX, prevY, prevZ, x, y, z, '#666');
+                }
+                for (let j = 0; j < 5; j++) {
+                    const chainX = x + Math.sin(rot * 0.5 + j + i) * (20 + j * 5);
+                    const chainY = y + 40 + j * 35;
+                    const chainZ = z + Math.cos(rot * 0.3 + j) * 15;
+                    drawAtom(ctx, chainX, chainY, chainZ, '#ff6b35', 12, 'C');
+                    if (j === 0) {
+                        drawBond(ctx, x, y, z, chainX, chainY, chainZ, '#ff3333');
+                    } else {
+                        const prevChainX = x + Math.sin(rot * 0.5 + (j-1) + i) * (20 + (j-1) * 5);
+                        const prevChainY = y + 40 + (j-1) * 35;
+                        const prevChainZ = z + Math.cos(rot * 0.3 + (j-1)) * 15;
+                        drawBond(ctx, prevChainX, prevChainY, prevChainZ, chainX, chainY, chainZ, '#ff6b35');
+                    }
+                }
+            }
+        }
+
+        function drawPhospholipid(ctx, time) {
+            const rot = time * 0.001;
+            const headX = Math.sin(rot) * 30;
+            const headY = -80;
+            const headZ = Math.cos(rot) * 30;
+            drawAtom(ctx, headX, headY, headZ, '#ffd700', 20, 'P');
+            drawAtom(ctx, 0, -40, 0, '#00d4ff', 15, 'C');
+            drawBond(ctx, headX, headY, headZ, 0, -40, 0, '#888');
+            [-1, 1].forEach((dir, idx) => {
+                for (let i = 0; i < 6; i++) {
+                    const x = dir * 40 + Math.sin(rot + i * 0.5) * 10;
+                    const y = i * 30;
+                    const z = Math.cos(rot + i * 0.3 + idx) * 20;
+                    drawAtom(ctx, x, y, z, '#ff6b35', 12, 'C');
+                    if (i === 0) {
+                        drawBond(ctx, 0, -40, 0, x, y, z, '#ff3333');
+                    } else {
+                        const prevX = dir * 40 + Math.sin(rot + (i-1) * 0.5) * 10;
+                        const prevY = (i-1) * 30;
+                        const prevZ = Math.cos(rot + (i-1) * 0.3 + idx) * 20;
+                        drawBond(ctx, prevX, prevY, prevZ, x, y, z, '#ff6b35');
+                    }
+                }
+            });
+        }
+
+        function drawHelix(ctx, time) {
+            const rot = time * 0.001;
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 3.6) * Math.PI * 2 + rot;
+                const y = (i - 6) * 25;
+                const x = Math.cos(angle) * 60;
+                const z = Math.sin(angle) * 60;
+                drawAtom(ctx, x, y, z, '#b829dd', 14, 'C');
+                const sideX = x * 1.4;
+                const sideZ = z * 1.4;
+                drawAtom(ctx, sideX, y, sideZ, '#d855f0', 10, 'R');
+                drawBond(ctx, x, y, z, sideX, y, sideZ, '#888');
+                if (i > 3) {
+                    const prevAngle = ((i-4) / 3.6) * Math.PI * 2 + rot;
+                    const prevY = ((i-4) - 6) * 25;
+                    const prevX = Math.cos(prevAngle) * 60;
+                    const prevZ = Math.sin(prevAngle) * 60;
+                    ctx.beginPath();
+                    const scale1 = 300 / (300 + z);
+                    const scale2 = 300 / (300 + prevZ);
+                    ctx.moveTo(x * scale1 + canvas.width/2, y * scale1 + canvas.height/2);
+                    ctx.lineTo(prevX * scale2 + canvas.width/2, prevY * scale2 + canvas.height/2);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.4)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 5]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            }
+        }
+
+        function drawProtein3D(ctx, time) {
+            const rot = time * 0.0008;
+            const points = [];
+            for (let i = 0; i < 20; i++) {
+                const t = i / 20;
+                const x = Math.sin(t * Math.PI * 4 + rot) * 80 + Math.cos(t * Math.PI * 2) * 40;
+                const y = Math.cos(t * Math.PI * 3 + rot * 0.5) * 60;
+                const z = Math.sin(t * Math.PI * 5) * 50;
+                points.push({x, y, z});
+                const colors = ['#b829dd', '#d855f0', '#9a1fc0'];
+                drawAtom(ctx, x, y, z, colors[i % 3], 12, 'AA');
+                if (i > 0) {
+                    drawBond(ctx, points[i-1].x, points[i-1].y, points[i-1].z, x, y, z, '#666');
+                }
+            }
+            drawAtom(ctx, points[4].x, points[4].y + 20, points[4].z, '#ffd700', 14, 'S');
+            drawAtom(ctx, points[16].x, points[16].y - 20, points[16].z, '#ffd700', 14, 'S');
+        }
+
+        function drawDNA(ctx, time) {
+            const rot = time * 0.001;
+            for (let i = 0; i < 10; i++) {
+                const angle = (i / 10) * Math.PI * 4 + rot;
+                const y = (i - 5) * 30;
+                const x1 = Math.cos(angle) * 50;
+                const z1 = Math.sin(angle) * 50;
+                drawAtom(ctx, x1, y, z1, '#ffd700', 12, 'P');
+                const x2 = Math.cos(angle + Math.PI) * 50;
+                const z2 = Math.sin(angle + Math.PI) * 50;
+                drawAtom(ctx, x2, y, z2, '#ffd700', 12, 'P');
+                const bx1 = Math.cos(angle) * 25;
+                const bz1 = Math.sin(angle) * 25;
+                const bx2 = Math.cos(angle + Math.PI) * 25;
+                const bz2 = Math.sin(angle + Math.PI) * 25;
+                const baseColors = ['#ff6b35', '#00d4ff'];
+                drawAtom(ctx, bx1, y, bz1, baseColors[i % 2], 10, 'B');
+                drawAtom(ctx, bx2, y, bz2, baseColors[(i+1) % 2], 10, 'B');
+                ctx.beginPath();
+                const scale = 300 / (300 + bz1);
+                ctx.moveTo(bx1 * scale + canvas.width/2, y * scale + canvas.height/2);
+                ctx.lineTo(bx2 * scale + canvas.width/2, y * scale + canvas.height/2);
+                ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+        }
+
+        function drawRNA(ctx, time) {
+            const rot = time * 0.001;
+            for (let i = 0; i < 14; i++) {
+                let x, y, z;
+                if (i < 7) {
+                    const angle = (i / 7) * Math.PI + rot;
+                    x = Math.cos(angle) * 40;
+                    y = (i - 7) * 25;
+                    z = Math.sin(angle) * 40;
+                } else {
+                    const angle = ((14-i) / 7) * Math.PI + rot;
+                    x = Math.cos(angle) * 40;
+                    y = (i - 7) * 25;
+                    z = -Math.sin(angle) * 40;
+                }
+                drawAtom(ctx, x, y, z, '#00d4ff', 12, 'R');
+            }
+        }
+
+        function updateDisplay() {
+            const mol = molecules[current];
+            document.getElementById('typeBadge').textContent = mol.type;
+            document.getElementById('typeBadge').style.background = mol.bg;
+            document.getElementById('typeBadge').style.color = mol.color;
+            document.getElementById('typeBadge').style.border = `1px solid ${mol.color}`;
+            document.getElementById('molName').textContent = mol.name;
+            document.getElementById('molName').style.color = mol.color;
+            document.getElementById('molFormula').textContent = mol.formula;
+            document.getElementById('molFormula').style.color = mol.color;
+            document.getElementById('molFormula').style.borderLeft = `4px solid ${mol.color}`;
+            document.getElementById('molDesc').textContent = mol.desc;
+            autoPlayTimer = 0;
+        }
+
+        function nextMol() {
+            current = (current + 1) % molecules.length;
+            updateDisplay();
+            playChangeSound(); // Sonido al cambiar
+        }
+
+        function prevMol() {
+            current = (current - 1 + molecules.length) % molecules.length;
+            updateDisplay();
+            playChangeSound(); // Sonido al cambiar
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('playBtn').textContent = isPlaying ? '⏸' : '▶';
+        }
+
+        function animate(timestamp) {
+            if (!introFinished) return;
+            if (!lastTime) lastTime = timestamp;
+            const delta = timestamp - lastTime;
+            lastTime = timestamp;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            molecules[current].draw(ctx, timestamp);
+            if (isPlaying) {
+                autoPlayTimer += delta;
+                const progress = (autoPlayTimer / SLIDE_DURATION) * 100;
+                document.getElementById('progress').style.width = progress + '%';
+                if (autoPlayTimer >= SLIDE_DURATION) {
+                    nextMol();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        let touchStartX = 0;
+        canvas.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+        canvas.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? nextMol() : prevMol();
+            }
+        });
+    </script>
+</body>
+</html>
